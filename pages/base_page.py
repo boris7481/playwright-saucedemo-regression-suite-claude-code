@@ -20,3 +20,14 @@ class BasePage:
         # Retourne un booléen, ne lève pas d'exception.
         # Interrogation d'état — pas une assertion de test.
         return locator.is_visible()
+
+    def open_menu(self) -> None:
+        # Ouvre le menu hamburger — disponible sur toutes les pages.
+        # Doit être appelée avant logout() — les deux actions sont séparées
+        # conformément au principe : une méthode = une action.
+        self.page.get_by_role("button", name="Open Menu").click()
+
+    def logout(self) -> None:
+        # Clique sur le lien "Logout" dans le menu hamburger.
+        # Requiert que open_menu() ait été appelée au préalable.
+        self.page.get_by_role("link", name="Logout").click()
