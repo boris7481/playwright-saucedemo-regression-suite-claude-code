@@ -1,0 +1,62 @@
+from playwright.sync_api import Page, expect
+
+
+def test_add_multiple_products_to_card(page: Page):
+    page.goto("https://www.saucedemo.com/")
+    page.get_by_placeholder("Username").fill("standard_user")
+    page.get_by_placeholder("Password").fill("secret_sauce")
+    page.get_by_role("button", name="login").click()
+    expect(page.get_by_text("Products")).to_be_visible()
+    page.get_by_text("Sauce Labs Backpack").click()
+    expect(page.get_by_text("Back to products")).to_be_visible()
+    expect(page.get_by_text("Sauce Labs Backpack")).to_be_visible()
+    page.get_by_role("button", name="Add to cart").click()
+    expect(page.locator('[data-test="shopping-cart-badge"]')).to_have_text("1")
+    # second product
+    page.get_by_role("button", name="Back to products").click()
+    expect(page.get_by_text("Products")).to_be_visible()
+    page.get_by_text("Sauce Labs Bike Light").click()
+    expect(page.get_by_text("Back to products")).to_be_visible()
+    expect(page.get_by_text("Sauce Labs Bike Light")).to_be_visible()
+    page.get_by_role("button", name="Add to cart").click()
+    expect(page.locator('[data-test="shopping-cart-badge"]')).to_have_text("2")
+
+
+def test_add_single_product_to_card_and_verify_card_content(page: Page):
+    page.goto("https://www.saucedemo.com/")
+    page.get_by_placeholder("Username").fill("standard_user")
+    page.get_by_placeholder("Password").fill("secret_sauce")
+    page.get_by_role("button", name="login").click()
+    expect(page.get_by_text("Products")).to_be_visible()
+    page.get_by_text("Sauce Labs Backpack").click()
+    expect(page.get_by_text("Back to products")).to_be_visible()
+    expect(page.get_by_text("Sauce Labs Backpack")).to_be_visible()
+    page.get_by_role("button", name="Add to cart").click()
+    expect(page.locator('[data-test="shopping-cart-badge"]')).to_have_text("1")
+    page.locator('[data-test="shopping-cart-badge"]').click()
+    expect(page.locator('[data-test="inventory-item-name"]')).to_have_text("Sauce Labs Backpack")
+    expect(page.locator('[data-test="item-quantity"]')).to_have_text("1")
+    expect(page.locator('[data-test="inventory-item-price"]')).to_have_text("$29.99")
+    expect(page.get_by_text("Continue Shopping")).to_be_visible()
+    expect(page.get_by_role("button", name="Remove")).to_be_visible()
+
+
+def testtest_remove_product_from_cart(page: Page):
+    page.goto("https://www.saucedemo.com/")
+    page.get_by_placeholder("Username").fill("standard_user")
+    page.get_by_placeholder("Password").fill("secret_sauce")
+    page.get_by_role("button", name="login").click()
+    expect(page.get_by_text("Products")).to_be_visible()
+    page.get_by_text("Sauce Labs Backpack").click()
+    expect(page.get_by_text("Back to products")).to_be_visible()
+    expect(page.get_by_text("Sauce Labs Backpack")).to_be_visible()
+    page.get_by_role("button", name="Add to cart").click()
+    expect(page.locator('[data-test="shopping-cart-badge"]')).to_have_text("1")
+    page.locator('[data-test="shopping-cart-badge"]').click()
+    expect(page.locator('[data-test="inventory-item-name"]')).to_have_text( "Sauce Labs Backpack")
+    expect(page.locator('[data-test="item-quantity"]')).to_have_text("1")
+    expect(page.locator('[data-test="inventory-item-price"]')).to_have_text("$29.99")
+    expect(page.get_by_text("Continue Shopping")).to_be_visible()
+    expect(page.get_by_role("button", name="Remove")).to_be_visible()
+    page.get_by_role("button", name="Remove").click()
+    expect(page.get_by_text("Sauce Labs Backpack")).not_to_be_visible()
