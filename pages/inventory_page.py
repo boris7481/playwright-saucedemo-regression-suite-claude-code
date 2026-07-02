@@ -68,3 +68,8 @@ class InventoryPage(BasePage):
         if not self.cart_badge.is_visible():
             return 0
         return int(self.cart_badge.inner_text())
+
+    def go_to_cart(self) -> None:
+        # Clique sur le badge panier pour naviguer vers /cart.html.
+        # Suit le parcours utilisateur réel — pas de navigation directe par URL.
+        self.cart_badge.click()
