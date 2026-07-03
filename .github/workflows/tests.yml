@@ -17,25 +17,25 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - name: Checkout du code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Installation de Python
+      - name: Install Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
           cache: "pip"
 
-      - name: Installation des dépendances
+      - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Installation des navigateurs Playwright
+      - name: Install Playwright browsers
         run: playwright install --with-deps chromium
 
-      - name: Exécution des tests (xvfb pour --headed sur runner Linux)
+      - name: Run tests (xvfb for --headed on Linux runner)
         run: xvfb-run -a pytest --alluredir=reports/allure-results --screenshot=only-on-failure
 
-      - name: Upload des résultats Allure
+      - name: Upload Allure results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -43,7 +43,7 @@ jobs:
           path: reports/allure-results
           if-no-files-found: warn
 
-      - name: Upload des captures d'écran (échecs uniquement)
+      - name: Upload screenshots (failures only)
         if: always()
         uses: actions/upload-artifact@v4
         with:

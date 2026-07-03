@@ -19,14 +19,14 @@ playwright-report/
 .auth/
 
 # ==============================================================
-# Rapports et artefacts de test
+# Test reports and artifacts
 # ==============================================================
 reports/
 screenshots/
 !docs/screenshots/
 
 # ==============================================================
-# Couverture de code
+# Code coverage
 # ==============================================================
 .coverage
 htmlcov/
@@ -42,7 +42,7 @@ htmlcov/
 .vscode/
 
 # ==============================================================
-# Variables d'environnement
+# Environment variables
 # ==============================================================
 .env
 .env.*
@@ -53,13 +53,13 @@ htmlcov/
 *.log
 
 # ==============================================================
-# Linters et type checkers
+# Linters and type checkers
 # ==============================================================
 .mypy_cache/
 .ruff_cache/
 
 # ==============================================================
-# Système d'exploitation
+# Operating system
 # ==============================================================
 .DS_Store
 Thumbs.db

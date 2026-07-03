@@ -1,4 +1,4 @@
-# Playwright SauceDemo — Suite de Tests E2E
+# Playwright SauceDemo — E2E Test Suite
 
 [![Tests E2E](https://github.com/boris7481/playwright-saucedemo-regression-suite-claude-code/actions/workflows/tests.yml/badge.svg)](https://github.com/boris7481/playwright-saucedemo-regression-suite-claude-code/actions/workflows/tests.yml)
 ![Python](https://img.shields.io/badge/Python-3.13%2B-blue?logo=python&logoColor=white)
@@ -7,89 +7,89 @@
 ![Allure](https://img.shields.io/badge/Reports-Allure-FF6E00?logo=qameta&logoColor=white)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Présentation du projet
+## Project Overview
 
-Ce dépôt contient une suite de tests end-to-end pour le site de démonstration [SauceDemo](https://www.saucedemo.com/), construite avec **Playwright (Python)** et **pytest**. Le framework suit une architecture **Page Object Model** complète, avec des données de test centralisées, une intégration continue via **GitHub Actions**, et des rapports de test via **Allure**.
+This repository contains an end-to-end test suite for the [SauceDemo](https://www.saucedemo.com/) demo site, built with **Playwright (Python)** and **pytest**. The framework follows a complete **Page Object Model** architecture, with centralized test data, continuous integration via **GitHub Actions**, and test reporting via **Allure**.
 
-Le projet a été développé de façon incrémentale sur 12 sprints, chacun validé par un diff explicite et un commit dédié (voir [Historique des sprints](#historique-des-sprints)).
+This is a professional test automation framework, built incrementally over 12 sprints, each validated by an explicit diff and a dedicated commit (see [Sprint history](#sprint-history)).
 
-## Objectifs
+## Goals
 
-- Démontrer une architecture de test E2E professionnelle, lisible et maintenable par une équipe QA.
-- Illustrer les bonnes pratiques Playwright/pytest : Page Object Model, fixtures, paramétrisation ciblée, reporting, CI/CD.
-- Servir de référence technique pour l'automatisation de tests.
+- Demonstrate a professional, readable, and maintainable E2E test architecture for a QA team.
+- Showcase Playwright/pytest best practices: Page Object Model, fixtures, targeted parametrization, reporting, CI/CD.
+- Serve as a technical reference for test automation.
 
-## Technologies utilisées
+## Technologies Used
 
-| Outil | Rôle |
+| Tool | Role |
 |---|---|
-| Python 3.13 | Langage |
-| [Playwright](https://playwright.dev/python/) | Pilotage navigateur |
-| [pytest](https://docs.pytest.org/) | Framework de test |
-| pytest-playwright | Intégration Playwright / pytest |
-| pytest-base-url | Gestion de la `base_url` |
-| pytest-xdist | Exécution parallèle |
-| [allure-pytest](https://allurereport.org/) | Génération des résultats de test structurés |
-| GitHub Actions | Intégration continue |
-| Faker | Génération de données (disponible) |
+| Python 3.13 | Language |
+| [Playwright](https://playwright.dev/python/) | Browser automation |
+| [pytest](https://docs.pytest.org/) | Test framework |
+| pytest-playwright | Playwright / pytest integration |
+| pytest-base-url | `base_url` management |
+| pytest-xdist | Parallel test execution |
+| [allure-pytest](https://allurereport.org/) | Structured test result generation |
+| GitHub Actions | Continuous integration |
+| Faker | Data generation (available) |
 
-## Architecture du projet
+## Project Architecture
 
 ```
-tests/  ──utilise──▶  fixtures (conftest.py)  ──instancie──▶  Page Objects  ──pilote──▶  Playwright
-                                                                     │
-test_data/  ◀──utilisé par les tests et les Page Objects────────────┘
+tests/  ──uses──▶  fixtures (conftest.py)  ──instantiate──▶  Page Objects  ──drive──▶  Playwright
+                                                                    │
+test_data/  ◀──used by tests and Page Objects─────────────────────┘
 ```
 
-Principes structurants :
-- **Aucune assertion dans les Page Objects** — ils exposent des actions (`login()`, `add_to_cart()`) et des lectures d'état (`get_product_prices()`), jamais de vérifications. Les assertions restent dans les tests.
-- **Aucune chaîne codée en dur** dans les tests — toutes les données (identifiants, produits, messages) viennent de `test_data/`.
-- **Page Objects injectés via fixtures pytest**, jamais instanciés manuellement dans un test.
+Guiding principles:
+- **No assertions inside Page Objects** — they expose actions (`login()`, `add_to_cart()`) and state readers (`get_product_prices()`), never verifications. Assertions stay in the tests.
+- **No hardcoded strings** in the tests — all data (credentials, products, messages) comes from `test_data/`.
+- **Page Objects are injected via pytest fixtures**, never instantiated manually inside a test.
 
-## Arborescence expliquée
+## Repository Structure
 
 ```
 playwright-saucedemo-regression-suite_bis/
-├── .github/workflows/tests.yml   # Pipeline CI : exécution des tests sur push/PR vers main
-├── docs/screenshots/                # Capture du rapport Allure
+├── .github/workflows/tests.yml   # CI pipeline: runs the test suite on push/PR to main
+├── docs/screenshots/                # Allure report screenshot
 ├── pages/
-│   ├── base_page.py                 # Comportements communs (navigation, menu, logout)
-│   ├── login_page.py                 # Page Object : connexion
-│   ├── inventory_page.py              # Page Object : catalogue produits
-│   ├── cart_page.py                    # Page Object : panier
-│   └── checkout_page.py                 # Page Object : tunnel de commande
+│   ├── base_page.py                 # Shared behavior (navigation, menu, logout)
+│   ├── login_page.py                 # Page Object: login
+│   ├── inventory_page.py              # Page Object: product catalog
+│   ├── cart_page.py                    # Page Object: shopping cart
+│   └── checkout_page.py                 # Page Object: checkout flow
 ├── test_data/
-│   ├── users.py                    # Identifiants de test
-│   ├── products.py                  # Catalogue produits, prix, options de tri
-│   ├── checkout_info.py              # Données du formulaire de commande
-│   └── messages.py                    # Messages d'erreur / succès métier
+│   ├── users.py                    # Test credentials
+│   ├── products.py                  # Product catalog, prices, sort options
+│   ├── checkout_info.py              # Checkout form data
+│   └── messages.py                    # Expected business error/success messages
 ├── tests/
-│   ├── test_login.py                # Scénarios de connexion
-│   ├── test_inventory.py             # Catalogue, tri
-│   ├── test_card.py                   # Panier
-│   ├── test_checkout.py                # Tunnel de commande
-│   ├── test_e2e_order.py                # Parcours complet bout-en-bout
-│   └── test_logout.py                    # Déconnexion
-├── conftest.py                     # Fixtures pytest (authentification, Page Objects)
-├── pytest.ini                      # Configuration pytest (base_url, --headed)
-├── requirements.txt                # Dépendances Python figées
-├── .editorconfig                   # Conventions d'édition
+│   ├── test_login.py                # Login scenarios
+│   ├── test_inventory.py             # Catalog, sorting
+│   ├── test_card.py                   # Shopping cart
+│   ├── test_checkout.py                # Checkout flow
+│   ├── test_e2e_order.py                # Full end-to-end order flow
+│   └── test_logout.py                    # Logout
+├── conftest.py                     # pytest fixtures (authentication, Page Objects)
+├── pytest.ini                      # pytest configuration (base_url, --headed)
+├── requirements.txt                # Pinned Python dependencies
+├── .editorconfig                   # Editor conventions
 ├── .gitignore
-├── LICENSE                         # Licence MIT
+├── LICENSE                         # MIT License
 └── README.md
 ```
 
 ## Installation
 
-### Prérequis
+### Prerequisites
 - Python 3.13+
 - Git
 
-### Création de l'environnement virtuel
+### Creating the virtual environment
 ```bash
 python -m venv .venv
 ```
-Activation :
+Activation:
 ```bash
 # Windows (PowerShell)
 .venv\Scripts\Activate.ps1
@@ -98,139 +98,140 @@ Activation :
 source .venv/bin/activate
 ```
 
-### Installation des dépendances
+### Installing dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### Installation des navigateurs Playwright
+### Installing Playwright browsers
 ```bash
 playwright install chromium
 ```
-> En CI (Linux), le flag `--with-deps` installe aussi les bibliothèques système requises : `playwright install --with-deps chromium` (déjà configuré dans le workflow GitHub Actions).
+> In CI (Linux), the `--with-deps` flag also installs the required system libraries: `playwright install --with-deps chromium` (already configured in the GitHub Actions workflow).
 
-## Exécution des tests
+## Test Execution
 
-Lancer toute la suite (mode `--headed` par défaut, voir `pytest.ini`) :
+Run the whole suite (`--headed` by default, see `pytest.ini`):
 ```bash
 pytest
 ```
 
-### Exécution d'un fichier de test
+### Running a test file
 ```bash
 pytest tests/test_checkout.py
 ```
 
-### Exécution d'un test unique
+### Running a single test
 ```bash
 pytest tests/test_checkout.py::test_checkout_complete
 ```
 
-### Tests paramétrés
+### Parametrized tests
 ```bash
-# Tous les cas d'un test paramétré
+# All cases of a parametrized test
 pytest tests/test_checkout.py::test_checkout_required_field
 
-# Un seul cas précis, via son id
+# One specific case, by its id
 pytest "tests/test_checkout.py::test_checkout_required_field[missing_first_name]"
 
-# Filtrage par mot-clé
+# Filtering by keyword
 pytest -k "missing_first_name"
 ```
 
-## Génération des rapports Allure
+## Generating Allure Reports
 
-L'intégration Allure est **volontaire** (pas activée par défaut dans `pytest.ini`, pour garder `pytest` neutre en local) :
+Allure integration is **opt-in** (not enabled by default in `pytest.ini`, to keep `pytest` neutral locally):
 ```bash
-# 1. Exécuter les tests en générant les résultats bruts
+# 1. Run the tests, generating raw results
 pytest --alluredir=reports/allure-results
 
-# 2. Consulter le rapport (nécessite l'outil allure, installation séparée hors pip)
+# 2. View the report (requires the allure tool, installed separately from pip)
 allure serve reports/allure-results
 
-# — ou générer un rapport HTML statique —
+# — or generate a static HTML report —
 allure generate reports/allure-results -o reports/allure-report --clean
 ```
-> L'outil `allure` (CLI Java) s'installe séparément de `allure-pytest` : par exemple `scoop install allure` (Windows), `brew install allure` (macOS).
+> The `allure` CLI (Java-based) is installed separately from `allure-pytest`: e.g. `scoop install allure` (Windows), `brew install allure` (macOS).
 
-## Lancement du pipeline GitHub Actions
+## Running the GitHub Actions Pipeline
 
-Le workflow `.github/workflows/tests.yml` se déclenche automatiquement sur chaque `push` ou `pull_request` vers `main`. Il peut aussi être lancé manuellement depuis l'onglet **Actions** du dépôt → **Tests E2E** → **Run workflow**. Le badge en haut de ce README reflète l'état du dernier run.
+The `.github/workflows/tests.yml` workflow triggers automatically on every `push` or `pull_request` to `main`. It can also be run manually from the **Actions** tab of the repository → **Tests E2E** → **Run workflow**. The badge at the top of this README reflects the status of the latest run.
 
-Le pipeline exécute les tests sur `ubuntu-latest` via `xvfb-run` (pour préserver le mode `--headed` sans modifier `pytest.ini`), génère les résultats Allure et capture les échecs en screenshot, puis publie deux artefacts téléchargeables depuis la page du run : `allure-results` et `playwright-screenshots`.
+The pipeline runs the tests on `ubuntu-latest` via `xvfb-run` (to preserve `--headed` mode without touching `pytest.ini`), generates Allure results, captures failures as screenshots, then publishes two downloadable artifacts from the run page: `allure-results` and `playwright-screenshots`.
 
-## Structure des Page Objects
+## Page Object Structure
 
-| Page Object | Fichier | Responsabilité |
+| Page Object | File | Responsibility |
 |---|---|---|
-| `BasePage` | `pages/base_page.py` | Comportements transverses : navigation, menu, logout |
-| `LoginPage` | `pages/login_page.py` | Formulaire de connexion |
-| `InventoryPage` | `pages/inventory_page.py` | Catalogue produits, tri, ajout au panier |
-| `CartPage` | `pages/cart_page.py` | Contenu du panier, suppression, navigation vers checkout |
-| `CheckoutPage` | `pages/checkout_page.py` | Tunnel de commande (informations, récapitulatif, confirmation) |
+| `BasePage` | `pages/base_page.py` | Cross-cutting behavior: navigation, menu, logout |
+| `LoginPage` | `pages/login_page.py` | Login form |
+| `InventoryPage` | `pages/inventory_page.py` | Product catalog, sorting, adding to cart |
+| `CartPage` | `pages/cart_page.py` | Cart contents, removal, navigation to checkout |
+| `CheckoutPage` | `pages/checkout_page.py` | Checkout flow (information, summary, confirmation) |
 
-## Structure des données de test
+## Test Data Structure
 
-| Fichier | Contenu |
+| File | Content |
 |---|---|
-| `test_data/users.py` | Identifiants (utilisateur standard, verrouillé, invalide...) |
-| `test_data/products.py` | Noms de produits, prix, options de tri |
-| `test_data/checkout_info.py` | Jeux de données du formulaire de commande |
-| `test_data/messages.py` | Messages d'erreur / succès métier attendus |
+| `test_data/users.py` | Credentials (standard, locked-out, invalid user...) |
+| `test_data/products.py` | Product names, prices, sort options |
+| `test_data/checkout_info.py` | Checkout form data sets |
+| `test_data/messages.py` | Expected business error / success messages |
 
-Choix assumé : des dictionnaires simples plutôt que des `dataclass`, pour rester lisible et prêt à être réutilisé directement dans `pytest.mark.parametrize`.
+Deliberate choice: plain dictionaries rather than `dataclass`, to stay readable and ready to be reused directly in `pytest.mark.parametrize`.
 
-## Fixtures utilisées
+## Fixtures Used
 
-| Fixture | Portée | Rôle |
+| Fixture | Scope | Role |
 |---|---|---|
-| `page` | function (pytest-playwright) | Page Playwright brute, non authentifiée |
-| `authenticated_page` | function | Page connectée avec l'utilisateur standard |
-| `login_page` | function | Instance de `LoginPage` liée à `page` |
-| `inventory_page` | function | Instance de `InventoryPage` liée à `authenticated_page` |
-| `cart_page` | function | Instance de `CartPage` liée à `authenticated_page` |
-| `checkout_page` | function | Instance de `CheckoutPage` liée à `authenticated_page` |
+| `page` | function (pytest-playwright) | Raw, unauthenticated Playwright page |
+| `authenticated_page` | function | Page logged in as the standard user |
+| `login_page` | function | `LoginPage` instance bound to `page` |
+| `inventory_page` | function | `InventoryPage` instance bound to `authenticated_page` |
+| `cart_page` | function | `CartPage` instance bound to `authenticated_page` |
+| `checkout_page` | function | `CheckoutPage` instance bound to `authenticated_page` |
 
-## Bonnes pratiques du framework
+## Framework Best Practices
 
-- Aucune chaîne codée en dur : toutes les données proviennent de `test_data/`.
-- Aucune assertion dans les Page Objects — séparation stricte action / vérification.
-- Page Objects injectés via fixtures, jamais instanciés manuellement dans un test.
-- `pytest.mark.parametrize` utilisé uniquement quand plusieurs tests partagent exactement le même comportement — pas de paramétrisation forcée.
-- Reporting et CI strictement opt-in (`--alluredir`, `--screenshot`) : le comportement local par défaut de `pytest` n'a jamais été modifié.
-- Chaque évolution du framework a été validée par un diff explicite avant application.
+- No hardcoded strings: all data comes from `test_data/`.
+- No assertions inside Page Objects — strict separation between actions and verifications.
+- Page Objects injected via fixtures, never instantiated manually inside a test.
+- `pytest.mark.parametrize` used only when several tests share the exact same behavior — no forced parametrization.
+- Reporting and CI are strictly opt-in (`--alluredir`, `--screenshot`): the default local `pytest` behavior has never been changed.
+- Every evolution of the framework was validated through an explicit diff before being applied.
 
-## Captures
+## Screenshots
 
-### Rapport Allure
-![Rapport Allure](docs/screenshots/allure-report.png)
+### Allure Report
+![Allure Report](docs/screenshots/allure-report.png)
 
-## Historique des sprints
+## Sprint History
 
-| Sprint | Contenu |
+| Sprint | Content |
 |---|---|
-| 1-5 | Mise en place du Page Object Model complet (`BasePage`, `LoginPage`, `InventoryPage`, `CartPage`, `CheckoutPage`) |
-| 6 | Centralisation des données de test (`test_data/`) |
-| 7 | Fixtures pytest pour l'injection des Page Objects |
-| 8 | Paramétrisation ciblée avec `pytest.mark.parametrize` |
-| 9 | Étude de Playwright Storage State (reportée) |
-| 10 | Intégration d'Allure Reports |
-| 11 | Pipeline GitHub Actions (CI) |
-| 12 | Documentation et professionnalisation du dépôt |
+| 1-5 | Full Page Object Model setup (`BasePage`, `LoginPage`, `InventoryPage`, `CartPage`, `CheckoutPage`) |
+| 6 | Test data centralization (`test_data/`) |
+| 7 | pytest fixtures for Page Object injection |
+| 8 | Targeted parametrization with `pytest.mark.parametrize` |
+| 9 | Playwright Storage State study (deferred) |
+| 10 | Allure Reports integration |
+| 11 | GitHub Actions pipeline (CI) |
+| 12 | Documentation and repository professionalization |
+| 13 | Full documentation internationalization (English) |
 
-## Auteur
+## Author
 
-**Auteur :** Boris Thibaut Tondjua
-**GitHub :** [@boris7481](https://github.com/boris7481)
+**Author:** Boris Thibaut Tondjua
+**GitHub:** [@boris7481](https://github.com/boris7481)
 
-## Perspectives d'évolution
+## Future Improvements
 
-- Playwright Storage State pour éviter le login UI répété (reporté au Sprint 9, prêt à être implémenté).
-- Publication automatique du rapport Allure avec historique de tendances entre runs CI.
-- Exécution multi-navigateurs (Firefox, WebKit) en complément de Chromium.
-- Ajout d'un outil de lint/format (ruff, black) avec un workflow CI dédié.
-- Environnements configurables (staging/prod) via variable d'environnement pour `base_url`.
+- Playwright Storage State to avoid repeated UI logins (deferred in Sprint 9, ready to be implemented).
+- Automated Allure report publishing with trend history across CI runs.
+- Multi-browser execution (Firefox, WebKit) in addition to Chromium.
+- Adding a lint/format tool (ruff, black) with a dedicated CI workflow.
+- Configurable environments (staging/production) via an environment variable for `base_url`.
 
-## Licence
+## License
 
-Ce projet est distribué sous licence MIT — voir le fichier [LICENSE](LICENSE).
+This project is distributed under the MIT License — see the [LICENSE](LICENSE) file.

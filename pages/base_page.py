@@ -3,31 +3,31 @@ from playwright.sync_api import Page, Locator
 
 class BasePage:
     """
-    Classe parente commune à tous les Page Objects.
-    Ne contient que des comportements strictement transverses.
-    Toute logique spécifique à une page appartient à la sous-classe.
+    Base class shared by all Page Objects.
+    Contains only strictly cross-cutting behavior.
+    Any page-specific logic belongs in the subclass.
     """
 
     def __init__(self, page: Page) -> None:
         self.page = page
 
     def navigate(self, path: str = "") -> None:
-        # Reçoit un chemin relatif ("/inventory.html") ou vide ("/").
-        # La base URL est gérée par pytest-base-url dans conftest.py.
+        # Accepts a relative path ("/inventory.html") or an empty one ("/").
+        # The base URL is handled by pytest-base-url in conftest.py.
         self.page.goto(path)
 
     def is_visible(self, locator: Locator) -> bool:
-        # Retourne un booléen, ne lève pas d'exception.
-        # Interrogation d'état — pas une assertion de test.
+        # Returns a boolean, never raises.
+        # State check — not a test assertion.
         return locator.is_visible()
 
     def open_menu(self) -> None:
-        # Ouvre le menu hamburger — disponible sur toutes les pages.
-        # Doit être appelée avant logout() — les deux actions sont séparées
-        # conformément au principe : une méthode = une action.
+        # Opens the hamburger menu — available on every page.
+        # Must be called before logout() — the two actions are kept separate
+        # per the one-method-one-action principle.
         self.page.get_by_role("button", name="Open Menu").click()
 
     def logout(self) -> None:
-        # Clique sur le lien "Logout" dans le menu hamburger.
-        # Requiert que open_menu() ait été appelée au préalable.
+        # Clicks the "Logout" link in the hamburger menu.
+        # Requires open_menu() to have been called first.
         self.page.get_by_role("link", name="Logout").click()

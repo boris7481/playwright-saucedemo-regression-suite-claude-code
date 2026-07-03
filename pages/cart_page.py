@@ -5,10 +5,10 @@ from pages.base_page import BasePage
 
 class CartPage(BasePage):
     """
-    Page Object représentant la page panier (/cart.html).
-    Responsabilités : navigation, lecture du contenu, suppression d'articles,
-    navigation vers checkout ou retour inventory.
-    Aucune assertion. Aucune connaissance des pages adjacentes.
+    Page Object representing the cart page (/cart.html).
+    Responsibilities: navigation, reading cart contents, removing items,
+    navigating to checkout or back to inventory.
+    No assertions. No knowledge of adjacent pages.
     """
 
     URL = "/cart.html"
@@ -16,32 +16,32 @@ class CartPage(BasePage):
     def __init__(self, page: Page) -> None:
         super().__init__(page)
 
-        # Locators sur des listes — plusieurs articles possibles.
+        # Locators over lists — multiple items possible.
         self.item_names = self.page.locator('[data-test="inventory-item-name"]')
         self.item_quantities = self.page.locator('[data-test="item-quantity"]')
         self.item_prices = self.page.locator('[data-test="inventory-item-price"]')
 
-        # Locators sur des éléments uniques — boutons d'action globaux.
+        # Locators over single elements — global action buttons.
         self.checkout_button = self.page.get_by_role("button", name="Checkout")
         self.continue_shopping_button = self.page.get_by_role("button", name="Continue Shopping")
 
     def open(self) -> None:
-        # Navigue vers /cart.html via BasePage.navigate().
-        # Requiert que base_url soit configuré dans pytest.ini.
+        # Navigates to /cart.html via BasePage.navigate().
+        # Requires base_url to be configured in pytest.ini.
         self.navigate(self.URL)
 
     def get_item_names(self) -> list[str]:
-        # Retourne les noms de tous les articles présents dans le panier.
-        # Retourne une liste vide si le panier est vide.
+        # Returns the names of all items currently in the cart.
+        # Returns an empty list if the cart is empty.
         return self.item_names.all_text_contents()
 
     def get_item_quantity(self, name: str) -> int:
-        # Retourne la quantité d'un article spécifique sous forme d'entier.
-        # Résout la quantité dans le contexte du conteneur de l'article ciblé
-        # pour éviter toute ambiguïté avec d'autres articles.
-        # Volontairement conservée pour rendre le framework extensible —
-        # SauceDemo retourne actuellement toujours 1, mais cette méthode
-        # sera utile dès qu'un scénario de quantité variable sera testé.
+        # Returns the quantity of a specific item as an integer.
+        # Resolves the quantity within the targeted item's container
+        # to avoid ambiguity with other items.
+        # Kept deliberately, to keep the framework extensible —
+        # SauceDemo currently always returns 1, but this method
+        # will be useful once a variable-quantity scenario is tested.
         quantity = (
             self.page.locator(".cart_item")
             .filter(has_text=name)
@@ -51,9 +51,9 @@ class CartPage(BasePage):
         return int(quantity)
 
     def get_item_price(self, name: str) -> float:
-        # Retourne le prix d'un article spécifique sous forme de float.
-        # La conversion "$29.99" → 29.99 appartient au Page Object,
-        # pas au test — cohérent avec InventoryPage.get_product_prices().
+        # Returns the price of a specific item as a float.
+        # The "$29.99" → 29.99 conversion belongs in the Page Object,
+        # not the test — consistent with InventoryPage.get_product_prices().
         price = (
             self.page.locator(".cart_item")
             .filter(has_text=name)
@@ -63,22 +63,22 @@ class CartPage(BasePage):
         return float(price.replace("$", ""))
 
     def remove_item(self, name: str) -> None:
-        # Clique sur le bouton "Remove" de l'article ciblé par son nom.
-        # .cart_item est le conteneur réel des articles sur /cart.html —
-        # SauceDemo n'expose pas de data-test sur ce conteneur.
-        # filter(has_text=name) garantit le bon bouton même avec
-        # plusieurs articles dans le panier.
+        # Clicks the "Remove" button of the item targeted by name.
+        # .cart_item is the actual item container on /cart.html —
+        # SauceDemo doesn't expose a data-test attribute on this container.
+        # filter(has_text=name) guarantees the right button even with
+        # several items in the cart.
         self.page.locator(".cart_item").filter(
             has_text=name
         ).get_by_role("button", name="Remove").click()
 
     def checkout(self) -> None:
-        # Clique sur le bouton "Checkout" pour naviguer vers la page checkout.
-        # Nom court et cohérent avec les autres méthodes du framework.
-        # Le test vérifie ce qui se passe après — CartPage ne le sait pas.
+        # Clicks the "Checkout" button to navigate to the checkout page.
+        # Short name, consistent with the other framework methods.
+        # The test verifies what happens next — CartPage doesn't know.
         self.checkout_button.click()
 
     def continue_shopping(self) -> None:
-        # Clique sur "Continue Shopping" pour retourner sur /inventory.html.
-        # Le test gère la suite de la navigation.
+        # Clicks "Continue Shopping" to return to /inventory.html.
+        # The test handles the rest of the navigation.
         self.continue_shopping_button.click()

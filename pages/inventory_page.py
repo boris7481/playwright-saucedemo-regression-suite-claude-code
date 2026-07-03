@@ -5,9 +5,9 @@ from pages.base_page import BasePage
 
 class InventoryPage(BasePage):
     """
-    Page Object représentant la page inventory (/inventory.html).
-    Responsabilités : navigation, lecture des produits, tri, ajout au panier.
-    Aucune assertion. Aucune connaissance des pages suivantes.
+    Page Object representing the inventory page (/inventory.html).
+    Responsibilities: navigation, reading products, sorting, adding to cart.
+    No assertions. No knowledge of subsequent pages.
     """
 
     URL = "/inventory.html"
@@ -15,61 +15,61 @@ class InventoryPage(BasePage):
     def __init__(self, page: Page) -> None:
         super().__init__(page)
 
-        # Locators sur des listes — retournent N éléments.
-        # Résolus via all_text_contents() dans les méthodes.
+        # Locators over lists — resolve to N elements.
+        # Resolved via all_text_contents() in the methods below.
         self.product_names = self.page.locator('[data-test="inventory-item-name"]')
         self.product_prices = self.page.locator('[data-test="inventory-item-price"]')
 
-        # Locators sur des éléments uniques.
+        # Locators over single elements.
         self.sort_dropdown = self.page.locator('[data-test="product-sort-container"]')
         self.cart_badge = self.page.locator('[data-test="shopping-cart-badge"]')
 
     def open(self) -> None:
-        # Navigue vers /inventory.html via BasePage.navigate().
-        # Requiert que base_url soit configuré dans pytest.ini.
+        # Navigates to /inventory.html via BasePage.navigate().
+        # Requires base_url to be configured in pytest.ini.
         self.navigate(self.URL)
 
     def get_product_names(self) -> list[str]:
-        # Retourne tous les noms de produits visibles sous forme de liste.
-        # Le test fait ses propres assertions sur cette liste.
+        # Returns all visible product names as a list.
+        # The test makes its own assertions on this list.
         return self.product_names.all_text_contents()
 
     def get_product_prices(self) -> list[float]:
-        # Retourne les prix sous forme de floats — le "$" est retiré ici.
-        # La conversion string→float appartient au Page Object :
-        # c'est de la mécanique UI, pas de la logique de test.
+        # Returns prices as floats — the "$" is stripped here.
+        # The string-to-float conversion belongs in the Page Object:
+        # it's UI mechanics, not test logic.
         raw = self.product_prices.all_text_contents()
         return [float(price.replace("$", "")) for price in raw]
 
     def sort_by(self, option: str) -> None:
-        # Sélectionne une option de tri par son label visible.
-        # label= garantit la sélection par texte affiché, pas par valeur interne.
-        # Exemples : "Name (A to Z)", "Price (low to high)"
+        # Selects a sort option by its visible label.
+        # label= guarantees selection by displayed text, not internal value.
+        # Examples: "Name (A to Z)", "Price (low to high)"
         self.sort_dropdown.select_option(label=option)
 
     def open_product(self, name: str) -> None:
-        # Clique sur un produit par son nom pour ouvrir sa page détail.
-        # get_by_text() est approprié ici : le nom est unique sur la page.
+        # Clicks a product by its name to open its detail page.
+        # get_by_text() is appropriate here: the name is unique on the page.
         self.page.get_by_text(name).click()
 
     def add_to_cart(self, name: str) -> None:
-        # Résout dynamiquement le bouton "Add to cart" du produit ciblé.
-        # filter() cible le conteneur du produit dont le nom correspond,
-        # puis remonte au bouton dans ce contexte — évite l'ambiguïté
-        # entre les 6 boutons identiques présents sur la page.
+        # Dynamically resolves the "Add to cart" button for the targeted product.
+        # filter() targets the container of the product whose name matches,
+        # then scopes the button lookup to that context — avoids ambiguity
+        # between the 6 identical buttons present on the page.
         self.page.locator('[data-test="inventory-item"]').filter(
             has_text=name
         ).get_by_role("button", name="Add to cart").click()
 
     def get_cart_count(self) -> int:
-        # Retourne le compteur du panier sous forme d'entier.
-        # Retourne 0 si le badge n'est pas visible — le badge disparaît
-        # du DOM quand le panier est vide, inner_text() lèverait une exception.
+        # Returns the cart counter as an integer.
+        # Returns 0 if the badge isn't visible — the badge is removed
+        # from the DOM when the cart is empty, inner_text() would raise.
         if not self.cart_badge.is_visible():
             return 0
         return int(self.cart_badge.inner_text())
 
     def go_to_cart(self) -> None:
-        # Clique sur le badge panier pour naviguer vers /cart.html.
-        # Suit le parcours utilisateur réel — pas de navigation directe par URL.
+        # Clicks the cart badge to navigate to /cart.html.
+        # Follows the real user journey — no direct URL navigation.
         self.cart_badge.click()

@@ -5,9 +5,9 @@ from pages.base_page import BasePage
 
 class LoginPage(BasePage):
     """
-    Page Object représentant la page de connexion de SauceDemo.
-    Responsabilités : navigation vers / et soumission du formulaire.
-    Aucune assertion. Aucune connaissance du résultat du login.
+    Page Object representing the SauceDemo login page.
+    Responsibilities: navigating to / and submitting the form.
+    No assertions. No knowledge of the login outcome.
     """
 
     URL = "/"
@@ -19,13 +19,13 @@ class LoginPage(BasePage):
         self.login_button = self.page.get_by_role("button", name="Login")
 
     def open(self) -> None:
-        # Navigue vers la page de login via BasePage.navigate().
-        # Le chemin est résolu contre la base_url de pytest-base-url.
+        # Navigates to the login page via BasePage.navigate().
+        # The path is resolved against pytest-base-url's base_url.
         self.navigate(self.URL)
 
     def login(self, username: str, password: str) -> None:
-        # Remplit le formulaire et le soumet.
-        # Aucune assertion sur le résultat — responsabilité du test.
+        # Fills in the form and submits it.
+        # No assertion on the outcome — that's the test's responsibility.
         self.username_input.fill(username)
         self.password_input.fill(password)
         self.login_button.click()
