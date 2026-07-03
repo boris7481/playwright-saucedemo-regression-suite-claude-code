@@ -23,6 +23,7 @@ playwright-report/
 # ==============================================================
 reports/
 screenshots/
+!docs/screenshots/
 
 # ==============================================================
 # Couverture de code
