@@ -8,24 +8,21 @@ from test_data.checkout_info import VALID_CUSTOMER
 from test_data.messages import CHECKOUT_SUCCESS_ORDER_CONFIRMATION
 
 
-def test_complete_order_flow(authenticated_page: Page):
-    inventory = InventoryPage(authenticated_page)
-    cart = CartPage(authenticated_page)
-    checkout = CheckoutPage(authenticated_page)
-    inventory.open_product(BACKPACK)
+def test_complete_order_flow(authenticated_page: Page, inventory_page: InventoryPage, cart_page: CartPage, checkout_page: CheckoutPage):
+    inventory_page.open_product(BACKPACK)
     expect(authenticated_page.get_by_text("Back to products")).to_be_visible()
     expect(authenticated_page.get_by_text(BACKPACK)).to_be_visible()
     authenticated_page.get_by_role("button", name="Add to cart").click()
     expect(authenticated_page.locator('[data-test="shopping-cart-badge"]')).to_have_text("1")
-    inventory.go_to_cart()
+    inventory_page.go_to_cart()
     expect(authenticated_page.locator('[data-test="inventory-item-name"]')).to_have_text(BACKPACK)
     expect(authenticated_page.get_by_text("Continue Shopping")).to_be_visible()
-    cart.checkout()
+    cart_page.checkout()
     expect(authenticated_page.get_by_text("Checkout: Your Information")).to_be_visible()
-    checkout.fill_information(
+    checkout_page.fill_information(
         VALID_CUSTOMER["first_name"], VALID_CUSTOMER["last_name"], VALID_CUSTOMER["postal_code"]
     )
-    checkout.continue_checkout()
+    checkout_page.continue_checkout()
     expect(authenticated_page.get_by_text("Checkout: Overview")).to_be_visible()
     expect(authenticated_page.get_by_text(BACKPACK)).to_be_visible()
     expect(authenticated_page.locator('[data-test="item-quantity"]')).to_have_text("1")
@@ -41,11 +38,11 @@ def test_complete_order_flow(authenticated_page: Page):
     assert expected_total == 32.39
     expect(authenticated_page.get_by_role("button", name="Finish")).to_be_visible()
     expect(authenticated_page.get_by_role("button", name="Cancel")).to_be_visible()
-    checkout.finish()
+    checkout_page.finish()
     expect(authenticated_page.get_by_text(CHECKOUT_SUCCESS_ORDER_CONFIRMATION)).to_be_visible()
-    checkout.go_back_home()
+    checkout_page.go_back_home()
     expect(authenticated_page.get_by_text("Products")).to_be_visible()
-    inventory.open_menu()
-    inventory.logout()
+    inventory_page.open_menu()
+    inventory_page.logout()
     expect(authenticated_page.get_by_text("Accepted usernames are:")).to_be_visible()
     expect(authenticated_page.get_by_text("Password for all users:")).to_be_visible()
