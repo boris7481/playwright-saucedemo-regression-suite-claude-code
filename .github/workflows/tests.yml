@@ -1,0 +1,52 @@
+name: Tests E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Installation des dépendances
+        run: pip install -r requirements.txt
+
+      - name: Installation des navigateurs Playwright
+        run: playwright install --with-deps chromium
+
+      - name: Exécution des tests (xvfb pour --headed sur runner Linux)
+        run: xvfb-run -a pytest --alluredir=reports/allure-results --screenshot=only-on-failure
+
+      - name: Upload des résultats Allure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: reports/allure-results
+          if-no-files-found: warn
+
+      - name: Upload des captures d'écran (échecs uniquement)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-screenshots
+          path: test-results
+          if-no-files-found: ignore
