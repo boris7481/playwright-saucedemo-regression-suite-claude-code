@@ -88,3 +88,4 @@ class CheckoutPage(BasePage):
         # Clicks "Back Home" from the confirmation page.
         # Returns to /inventory.html.
         self.back_home_button.click()
+

@@ -32,3 +32,5 @@ def test_login_with_invalid_credentials(
     login_page.open()
     login_page.login(user["username"], user["password"])
     expect(page.get_by_text(expected_error)).to_be_visible()
+
+
