@@ -40,4 +40,3 @@ def test_sort_inventory_price_from_high_to_low(inventory_page: InventoryPage):
     prices = inventory_page.get_product_prices()
     assert prices == sorted(prices, reverse=True)
 
-

@@ -29,4 +29,3 @@ class LoginPage(BasePage):
         self.username_input.fill(username)
         self.password_input.fill(password)
         self.login_button.click()
-
