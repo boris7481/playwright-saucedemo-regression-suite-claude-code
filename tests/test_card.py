@@ -48,3 +48,4 @@ def test_remove_product_from_cart(authenticated_page: Page, inventory_page: Inve
     expect(authenticated_page.get_by_role("button", name="Remove")).to_be_visible()
     cart_page.remove_item(BACKPACK)
     expect(authenticated_page.get_by_text(BACKPACK)).not_to_be_visible()
+

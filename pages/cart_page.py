@@ -82,3 +82,4 @@ class CartPage(BasePage):
         # Clicks "Continue Shopping" to return to /inventory.html.
         # The test handles the rest of the navigation.
         self.continue_shopping_button.click()
+

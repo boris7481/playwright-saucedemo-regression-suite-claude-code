@@ -14,3 +14,4 @@ SORT_NAME_Z_TO_A = "Name (Z to A)"
 SORT_PRICE_LOW_TO_HIGH = "Price (low to high)"
 SORT_PRICE_HIGH_TO_LOW = "Price (high to low)"
 
+

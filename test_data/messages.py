@@ -7,3 +7,4 @@ CHECKOUT_ERROR_LAST_NAME_REQUIRED = "Error: Last Name is required"
 CHECKOUT_ERROR_POSTAL_CODE_REQUIRED = "Error: Postal Code is required"
 
 CHECKOUT_SUCCESS_ORDER_CONFIRMATION = "Thank you for your order!"
+

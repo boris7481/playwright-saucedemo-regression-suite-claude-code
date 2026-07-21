@@ -73,3 +73,4 @@ class InventoryPage(BasePage):
         # Clicks the cart badge to navigate to /cart.html.
         # Follows the real user journey — no direct URL navigation.
         self.cart_badge.click()
+

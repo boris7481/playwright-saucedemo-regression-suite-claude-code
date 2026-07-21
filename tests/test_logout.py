@@ -8,3 +8,4 @@ def test_logout_standard(authenticated_page: Page, inventory_page: InventoryPage
     inventory_page.logout()
     expect(authenticated_page.get_by_text("Accepted usernames are:")).to_be_visible()
     expect(authenticated_page.get_by_text("Password for all users:")).to_be_visible()
+
