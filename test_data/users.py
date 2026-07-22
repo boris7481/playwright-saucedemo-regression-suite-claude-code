@@ -5,3 +5,4 @@ WRONG_PASSWORD = {"username": "standard_user", "password": "wrong_password"}
 EMPTY_CREDENTIALS = {"username": "", "password": ""}
 
 
+

@@ -32,3 +32,4 @@ class BasePage:
         # Requires open_menu() to have been called first.
         self.page.get_by_role("link", name="Logout").click()
 
+

@@ -83,3 +83,4 @@ class CartPage(BasePage):
         # The test handles the rest of the navigation.
         self.continue_shopping_button.click()
 
+

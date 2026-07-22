@@ -34,3 +34,4 @@ def test_login_with_invalid_credentials(
     expect(page.get_by_text(expected_error)).to_be_visible()
 
 
+
