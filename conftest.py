@@ -37,3 +37,4 @@ def cart_page(authenticated_page: Page) -> CartPage:
 def checkout_page(authenticated_page: Page) -> CheckoutPage:
     return CheckoutPage(authenticated_page)
 
+
