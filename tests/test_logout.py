@@ -12,3 +12,5 @@ def test_logout_standard(authenticated_page: Page, inventory_page: InventoryPage
 
 
 
+
+
