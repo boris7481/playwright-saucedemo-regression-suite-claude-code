@@ -53,4 +53,3 @@ def test_remove_product_from_cart(authenticated_page: Page, inventory_page: Inve
 
 
 
-
