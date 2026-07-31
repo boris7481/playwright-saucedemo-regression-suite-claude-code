@@ -115,3 +115,4 @@ def test_checkout_cancel(authenticated_page: Page, inventory_page: InventoryPage
 
 
 
+
