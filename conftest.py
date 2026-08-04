@@ -39,4 +39,3 @@ def checkout_page(authenticated_page: Page) -> CheckoutPage:
 
 
 
-

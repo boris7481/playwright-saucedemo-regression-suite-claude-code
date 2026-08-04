@@ -10,4 +10,3 @@ CHECKOUT_SUCCESS_ORDER_CONFIRMATION = "Thank you for your order!"
 
 
 
-
