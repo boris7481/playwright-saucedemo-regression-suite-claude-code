@@ -9,4 +9,3 @@ CHECKOUT_ERROR_POSTAL_CODE_REQUIRED = "Error: Postal Code is required"
 CHECKOUT_SUCCESS_ORDER_CONFIRMATION = "Thank you for your order!"
 
 
-

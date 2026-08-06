@@ -49,4 +49,3 @@ def test_complete_order_flow(authenticated_page: Page, inventory_page: Inventory
 
 
 
-
