@@ -10,4 +10,3 @@ def test_logout_standard(authenticated_page: Page, inventory_page: InventoryPage
     expect(authenticated_page.get_by_text("Password for all users:")).to_be_visible()
 
 
-

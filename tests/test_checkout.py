@@ -111,4 +111,3 @@ def test_checkout_cancel(authenticated_page: Page, inventory_page: InventoryPage
     checkout_page.cancel()
     expect(authenticated_page.get_by_text("Products")).to_be_visible()
 
-

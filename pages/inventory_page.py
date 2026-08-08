@@ -74,4 +74,3 @@ class InventoryPage(BasePage):
         # Follows the real user journey — no direct URL navigation.
         self.cart_badge.click()
 
-
