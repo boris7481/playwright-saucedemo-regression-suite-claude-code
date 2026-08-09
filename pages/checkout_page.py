@@ -89,3 +89,4 @@ class CheckoutPage(BasePage):
         # Returns to /inventory.html.
         self.back_home_button.click()
 
+
