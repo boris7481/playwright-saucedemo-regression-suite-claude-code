@@ -75,3 +75,4 @@ class InventoryPage(BasePage):
         self.cart_badge.click()
 
 
+
