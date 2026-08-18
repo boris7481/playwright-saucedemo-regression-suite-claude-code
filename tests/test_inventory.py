@@ -43,4 +43,3 @@ def test_sort_inventory_price_from_high_to_low(inventory_page: InventoryPage):
 
 
 
-
