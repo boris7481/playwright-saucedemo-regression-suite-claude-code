@@ -77,4 +77,3 @@ class InventoryPage(BasePage):
 
 
 
-
