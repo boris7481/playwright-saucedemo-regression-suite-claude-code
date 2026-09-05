@@ -31,4 +31,3 @@ class LoginPage(BasePage):
         self.login_button.click()
 
 
-
