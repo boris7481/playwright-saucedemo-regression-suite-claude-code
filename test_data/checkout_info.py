@@ -5,4 +5,3 @@ MISSING_LAST_NAME = {"first_name": "standard_user", "last_name": "", "postal_cod
 MISSING_POSTAL_CODE = {"first_name": "standard_user", "last_name": "last_check", "postal_code": ""}
 
 
-

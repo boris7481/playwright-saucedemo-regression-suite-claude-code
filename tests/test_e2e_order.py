@@ -47,3 +47,8 @@ def test_complete_order_flow(authenticated_page: Page, inventory_page: Inventory
     expect(authenticated_page.get_by_text("Accepted usernames are:")).to_be_visible()
     expect(authenticated_page.get_by_text("Password for all users:")).to_be_visible()
 
+
+
+
+
+

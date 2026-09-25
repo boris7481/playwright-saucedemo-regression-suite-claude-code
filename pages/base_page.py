@@ -33,4 +33,3 @@ class BasePage:
         self.page.get_by_role("link", name="Logout").click()
 
 
-
