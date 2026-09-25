@@ -30,3 +30,12 @@ class LoginPage(BasePage):
         self.password_input.fill(password)
         self.login_button.click()
 
+
+
+
+
+
+
+
+
+
